@@ -1,7 +1,7 @@
 import java.util.*;
 class Solution {
     public int solution(int[] priorities, int location) {
-        int count = 0;
+        int answer = 0;
         
         Deque<Integer> deque = new ArrayDeque<>();
         PriorityQueue<Integer> pQ = new PriorityQueue<>(Collections.reverseOrder());
@@ -15,7 +15,7 @@ class Solution {
         while(!pQ.isEmpty()) {
             int i = deque.pollFirst();
             if (max == priorities[i]) {
-                count++;
+                answer++;
                 max = pQ.poll();
 
                 if(location == i) break;
@@ -24,8 +24,8 @@ class Solution {
             }
         }
         
-        if(!deque.isEmpty() && deque.peekFirst() == location) count++;
+        if(!deque.isEmpty() && deque.peekFirst() == location) answer++;
 
-        return count;
+        return answer;
     }
 }
