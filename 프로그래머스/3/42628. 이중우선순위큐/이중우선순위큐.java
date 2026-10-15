@@ -23,16 +23,16 @@ class Solution {
                 }
             }
         }
-        
-        System.out.println(pQ);
     
         if(!pQ.isEmpty()) {
             answer[1] = pQ.poll();
             answer[0] = answer[1];
             
-            while(!pQ.isEmpty()) {
-                answer[0] = Math.max(pQ.poll(), answer[0]);
-            }
+            if (!pQ.isEmpty()) {
+                PriorityQueue<Integer> tmp = new PriorityQueue<>(Collections.reverseOrder());
+                tmp.addAll(pQ);
+                answer[0] = tmp.poll();
+            }      
         }
         
         return answer;
