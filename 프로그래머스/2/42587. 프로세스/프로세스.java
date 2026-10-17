@@ -11,21 +11,21 @@ class Solution {
             pQ.add(priorities[i]);
         }
         
-        int max = pQ.poll();
-        while(!pQ.isEmpty()) {
-            int i = deque.pollFirst();
-            if (max == priorities[i]) {
+        while(!deque.isEmpty()) {
+            int poll = pQ.poll();
+            int idx = deque.pollFirst();
+            
+            if(priorities[idx] == poll) {
                 answer++;
-                max = pQ.poll();
-
-                if(location == i) break;
+                if(idx == location) {
+                    break;
+                }
             } else {
-                deque.addLast(i);
+                deque.addLast(idx);
+                pQ.add(poll);
             }
         }
         
-        if(!deque.isEmpty() && deque.peekFirst() == location) answer++;
-
         return answer;
     }
 }
