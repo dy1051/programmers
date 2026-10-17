@@ -3,31 +3,24 @@ class Solution {
     public int solution(int[] scoville, int K) {
         int answer = 0;
         
-        PriorityQueue<Integer> heap = new PriorityQueue<>();
+        PriorityQueue<Integer> pQ = new PriorityQueue<>();
         
-        for(int i = 0 ; i < scoville.length ; i++) {
-            heap.add(scoville[i]);
-        }
+        for(int s : scoville) pQ.add(s);
         
-        
-        while(!heap.isEmpty()) {
-            int first = heap.poll();
+        while(!pQ.isEmpty() && pQ.size() > 1) {
+            int first = pQ.poll();
             
-            if(first >= K) break;
-            
-            if(heap.isEmpty()) {
-                if (first < K) answer = -1;
+            if (first < K) {
+                int second = pQ.poll();
+                pQ.add(first + second * 2);
+                answer++;
+            } else {
+                pQ.add(first);
                 break;
             }
-            
-            int second = heap.poll();
-            
-            int tmp = first + (second * 2);
-            
-            heap.add(tmp);
-            
-            answer++;
-        }
+        } 
+        
+        if (pQ.peek() < K) answer = -1;
         
         return answer;
     }
