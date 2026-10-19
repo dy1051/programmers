@@ -3,34 +3,21 @@ import java.util.*;
 class Solution {
     public int solution(int k, int[][] dungeons) {
         boolean[] visited = new boolean[dungeons.length];
-        dfs(dungeons.length, 0, visited, "", k, dungeons);
+        dfs(dungeons.length, 0, visited, k, dungeons);
         
         return answer;
     }
     
     int answer = 0;
-    void dfs(int L, int n, boolean[] visited, String str, int K, int[][] dungeons) {
-        if(n == L) {
-            int cnt = 0;
-            for(int i = 0 ; i < L ; i++) {
-                int idx = str.charAt(i) - '0';
-                if(K >= dungeons[idx][0]) {
-                    K -= dungeons[idx][1];
-                    cnt++;
-                } else {
-                    break;
-                }
-            }
-            answer = Math.max(answer, cnt);
-            return;
-        }
+    void dfs(int L, int n, boolean[] visited, int k, int[][] dungeons) {
+        answer = Math.max(answer, n);
         
         for (int i = 0 ; i < L ; i++) {
-            if (visited[i])
+            if (visited[i] || dungeons[i][0] > k)
                 continue;
             
             visited[i] = true;
-            dfs(L, n + 1, visited, str+i, K, dungeons);
+            dfs(L, n + 1, visited, k - dungeons[i][1], dungeons);
             visited[i] = false;
         }
     }
