@@ -11,12 +11,11 @@ class Solution {
     int answer = 0;
     void dfs(int L, int n, boolean[] visited, String str, int K, int[][] dungeons) {
         if(n == L) {
-            int tmp = K;
             int cnt = 0;
             for(int i = 0 ; i < L ; i++) {
                 int idx = str.charAt(i) - '0';
-                if(tmp >= dungeons[idx][0]) {
-                    tmp -= dungeons[idx][1];
+                if(K >= dungeons[idx][0]) {
+                    K -= dungeons[idx][1];
                     cnt++;
                 } else {
                     break;
