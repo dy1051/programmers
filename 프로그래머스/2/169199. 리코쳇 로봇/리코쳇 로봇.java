@@ -1,8 +1,6 @@
 import java.util.*;
 class Solution {
     public int solution(String[] board) {
-        int answer = 0;
-        
         int tX = board.length;
         int tY = board[0].length();
         
