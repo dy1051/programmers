@@ -38,7 +38,7 @@ class Solution {
             cnt++;
             
             for(int i : graph.get(now)) {
-                if(now == x && i == y) continue;
+                if((now == x && i == y) || (now == y && i == x)) continue;
                 if(!visited[i]) {
                     visited[i] = true;
                     queue.addLast(i);
