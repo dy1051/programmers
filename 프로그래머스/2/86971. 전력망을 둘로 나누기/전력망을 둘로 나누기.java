@@ -14,19 +14,15 @@ class Solution {
             graph.get(wire[1]).add(wire[0]);
         }
         
-        List<Integer> answer = new ArrayList<>();
+        int answer = n;
         for(int[] wire : wires) {
-            int x = wire[0];
-            int y = wire[1];
-            int left = bfs(n, x, x, y);
-            int right = bfs(n, y, y, x);
+            int count = bfs(n, wire[0], wire[0], wire[1]);
+            int diff = Math.abs(count - (n - count));
             
-            answer.add(Math.abs(left-right));
+            answer = Math.min(answer, diff);
         }
         
-        Collections.sort(answer);
-        
-        return answer.get(0);
+        return answer;
     }
     
     int bfs(int n, int start, int x, int y) {
