@@ -29,7 +29,7 @@ class Solution {
             int node = now[0];
             int cost = now[1];
             
-            if (cost < dist[node]) continue;
+            if (cost > dist[node]) continue;
             
             for(int[] edge : graph.get(node)) {
                 int next = edge[0];
