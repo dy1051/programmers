@@ -1,10 +1,9 @@
 import java.util.*;
 class Solution {
     public long solution(int n, int[] times) {
-        long answer = (long)times[0] * n;
-        
         Arrays.sort(times);
         
+        long answer = (long)times[0] * n;
         long left = 1;
         long right = (long)times[0] * n;
         
