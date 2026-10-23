@@ -1,81 +1,70 @@
 import java.util.*;
 class Solution {
+    int M; int N;
     char[][] graph;
-    boolean[][] visited;
-    int[][] check;
     
     public int solution(String[] maps) {
-        int rows = maps.length;
-        int cols = maps[0].length();
+        M = maps.length;
+        N = maps[0].length();
         
-        graph = new char[rows][cols];
+        graph = new char[M][N];
         
-        int[] start = new int[2];
-        int[] end = new int[2];
-        int[] lever = new int[2];
-        
-        for(int i = 0 ; i < rows; i++) {
-            for(int j = 0 ; j < cols ; j++) {
+        int sR = 0; int sC = 0;
+        int eR = 0; int eC = 0;
+        int lR = 0; int lC = 0;
+        for(int i = 0; i < M ; i++) {
+            for (int j = 0 ; j < N ; j++) {
                 graph[i][j] = maps[i].charAt(j);
-                
-                if (graph[i][j] == 'S') {
-                    start[0] = i;
-                    start[1] = j;
-                } else if (graph[i][j] == 'E') {
-                    end[0] = i;
-                    end[1] = j;
-                } else if (graph[i][j] == 'L') {
-                    lever[0] = i;
-                    lever[1] = j;
+                if(graph[i][j] == 'S') {
+                    sR = i; sC = j;
+                } else if(graph[i][j] == 'E') {
+                    eR = i; eC = j;
+                } else if(graph[i][j] == 'L') {
+                    lR = i; lC = j;
                 }
             }
         }
         
-        visited = new boolean[rows][cols];
-        check = new int[rows][cols];
+        int result = bfs(M, N, sR, sC, lR, lC, 0);
+        if(result == 0) return -1;
+        result = bfs(M, N, lR, lC, eR, eC, result);
+        if(result == 0) return -1;
         
-        int lRes = bfs(start, lever, rows, cols, 'L');
-        
-        if(lRes == 0)
-            return -1;
-        
-        visited = new boolean[rows][cols];
-        check = new int[rows][cols];
-        
-        check[lever[0]][lever[1]] = lRes;
-        int eRes = bfs(lever, end, rows, cols, 'E');
-        
-        return eRes == 0 ? -1 : eRes;
+        return result;
     }
     
-    int bfs(int[] s, int[] e, int R, int C, char type) {
+    int bfs(int M, int N, int startX, int startY, int endX, int endY, int ff) {
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.addLast(new int[]{startX, startY});
+        
+        boolean[][] visited = new boolean[M][N];
+        int[][] check = new int[M][N];
+        
         int[] dr = {-1, 1, 0, 0};
         int[] dc = {0, 0, -1, 1};
         
-        Deque<int[]> queue = new ArrayDeque<>();
+        visited[startX][startY] = true;
+        check[startX][startY] = ff;
         
-        queue.addLast(new int[]{s[0], s[1]});
-        visited[s[0]][s[1]] = true;
-        
-        while(!queue.isEmpty()) {
-            int[] now = queue.pollFirst();
+        while(!deque.isEmpty()) {
+            int[] now = deque.pollFirst();
+            int r = now[0];
+            int c = now[1];
             
-            if(graph[now[0]][now[1]] == type) {
-                break;
-            }
+            if(r == endX && c == endY) break;
             
             for(int i = 0 ; i < 4 ; i++) {
-                int x = now[0] + dr[i];
-                int y = now[1] + dc[i];
+                int x = r + dr[i];
+                int y = c + dc[i];
                 
-                if(x>=0 && x<R && y>=0 && y<C && !visited[x][y] && graph[x][y] != 'X') {
+                if(x>=0 && x<M && y>=0 && y<N && !visited[x][y] && graph[x][y] != 'X') {
+                    check[x][y] = check[r][c] + 1;
                     visited[x][y] = true;
-                    queue.addLast(new int[]{x, y});
-                    check[x][y] = check[now[0]][now[1]] + 1;
+                    deque.addLast(new int[]{x, y});
                 }
             }
+            
         }
-        
-        return check[e[0]][e[1]];
+        return check[endX][endY];
     }
 }
