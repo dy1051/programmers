@@ -1,38 +1,28 @@
 class Solution {
     public int solution(int n) {
+        if(n==1) return 1;
+        if(n==2) return 1;
+        
         int answer = 0;
         
-        int[] prefix = new int[n+1];
+        int left = 1;
+        int right = 2;
         
-        for(int i = 1 ; i <= n ; i++) {
-            prefix[i] = prefix[i-1] + i;
-        }
-        
-        for(int i = 0 ; i < n ; i++) {
-            int result = lowerBound(prefix, n + prefix[i]);
-            if(result == n+1) continue;
-            answer++;
-        }
-        
-        return answer;
-    }
-    
-    int lowerBound(int[] prefix, int target) {
-        int left = 0;
-        int right = prefix.length - 1;
-        
-        while(left <= right) {
-            int mid = (left+right)/2;
-            
-            if(prefix[mid] == target) {
-                return mid;
-            } else if (prefix[mid] < target) {
-                left = mid + 1;
+        int sum = left+right;
+        while(left <= right && right <= n) {
+            if(sum == n) {
+                answer++;
+                sum -= left;
+                left++;
+            } else if (sum < n) {
+                right++;
+                sum += right;
             } else {
-                right = mid - 1;
+                sum -= left;
+                left++;
             }
         }
         
-        return prefix.length;
+        return answer;
     }
 }
