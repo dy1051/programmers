@@ -8,8 +8,7 @@ class Solution {
         
         return answer == Integer.MAX_VALUE ? 0 : answer;
     }
-    
-    Deque<String> queue = new ArrayDeque<>();
+  
     boolean[] visited;
     void dfs(int n, String begin, String target, String[] words) {
         if (begin.equals(target)) {
@@ -28,9 +27,7 @@ class Solution {
             }
             
             visited[i] = true;
-            queue.addLast(words[i]);
             dfs(n+1, words[i], target, words);
-            queue.pollLast();
             visited[i] = false;
         }
     }
