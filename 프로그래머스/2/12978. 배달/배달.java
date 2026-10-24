@@ -16,36 +16,33 @@ class Solution {
             list.get(road[i][1]).add(new int[]{road[i][0], road[i][2]});
         }
         
-        Deque<int[]> queue = new ArrayDeque<>();
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
         int[] dist = new int[N + 1];
         Arrays.fill(dist, Integer.MAX_VALUE);
         
-        queue.addLast(new int[]{1, 0});
+        pq.offer(new int[]{1, 0});
         dist[1] = 0;
         
-        while (!queue.isEmpty()) {
-            int[] now = queue.pollFirst();
-            int nowId = now[0];
-            int nowCost = now[1];
+        while (!pq.isEmpty()) {
+            int[] n = pq.poll();
+            int nowId = n[0];
+            int nowCost = n[1];
             
-            if(nowCost >= K) continue;
+            if(dist[nowId] < nowCost) continue;
             
-            for(int[] next : list.get(nowId)) {
-                int newId = next[0];
-                int newCost = next[1];
+            for(int[] nt : list.get(nowId)) {
+                int nextId = nt[0];
+                int nextCost = nt[1];
                 
-                if(nowCost + newCost <= K) {
-                    if(dist[newId] > nowCost + newCost) {
-                        dist[newId] = nowCost + newCost;
-                        queue.addLast(new int[]{newId, nowCost+newCost});
-                    }
+                if(nowCost + nextCost <= K && dist[nextId] > nowCost + nextCost) {
+                    dist[nextId] = nowCost + nextCost;
+                    pq.offer(new int[]{nextId, nowCost + nextCost});
                 } 
-            }   
+            }
         }
         
         for(int i = 1 ; i < dist.length ; i++) {
-            if(dist[i] <= K)
-                answer++;
+            if(dist[i] <= K) answer++;
         }
 
         return answer;
