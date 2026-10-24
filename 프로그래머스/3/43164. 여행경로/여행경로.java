@@ -13,6 +13,10 @@ class Solution {
             hm.put(tickets[i][0], list);
         }
         
+        for (List<String[]> list : hm.values()) {
+            list.sort((a, b) -> a[1].compareTo(b[1]));
+        }
+        
         visited = new boolean[tickets.length + 1];
         queue.addLast("ICN");
         dfs("ICN", tickets.length + 1);
@@ -31,11 +35,8 @@ class Solution {
         }
 
         if (!hm.containsKey(now)) return; // 더 갈 곳이 없음
-
-        List<String[]> list = hm.get(now);
-        list.sort((a, b) -> a[1].compareTo(b[1]));
         
-        for (String[] next : list) {
+        for (String[] next : hm.get(now)) {
             int nextId = Integer.parseInt(next[0]);
             String nextCity = next[1];
             
