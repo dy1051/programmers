@@ -12,14 +12,13 @@ class Solution {
     Deque<String> queue = new ArrayDeque<>();
     boolean[] visited;
     void dfs(int n, String begin, String target, String[] words) {
-        if(!queue.isEmpty() && answer > queue.size()) {
-            String tmp = queue.peekLast();
-            if(tmp.equals(target)) {
-                answer = Math.min(answer, queue.size());
-                return;
-            }
+        if (begin.equals(target)) {
+            answer = Math.min(answer, n);
+            return;
         }
-        if(n == words.length) return;
+        
+        if (n >= answer) return;
+        if (n == words.length) return;
         
         for(int i = 0 ; i < words.length ; i++) {
             if(visited[i]) continue;
@@ -42,9 +41,7 @@ class Solution {
             if(begin.charAt(i) != word.charAt(i)) {
                 cnt++;
             }
-            if(cnt > 1)
-                return false;
         }
-        return true;
+        return cnt == 1;
     }
 }
