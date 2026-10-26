@@ -19,7 +19,8 @@ class Solution {
         
         for(int i = 0 ; i < n ; i++) {
             if(visited[i]) continue;
-            answer += bfs(i);
+            bfs(i);
+            answer++;
         }
         
         
@@ -27,13 +28,12 @@ class Solution {
     }
     
     boolean[] visited;
-    int bfs(int start) {
+    void bfs(int start) {
         Deque<Integer> queue = new ArrayDeque<>();
         
         queue.offerLast(start);
         visited[start] = true;
         
-        int result = 1;
         while(!queue.isEmpty()) {
             int now = queue.pollFirst();
             
@@ -44,7 +44,5 @@ class Solution {
                 }
             }
         }
-        
-        return result;
     }
 }
