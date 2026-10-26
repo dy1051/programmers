@@ -1,25 +1,13 @@
 import java.util.*;
 class Solution {
-    ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
     public int solution(int n, int[][] computers) {
         int answer = 0;
         
         visited = new boolean[n];
         
         for(int i = 0 ; i < n ; i++) {
-            graph.add(new ArrayList<>());
-        }
-        
-        for(int i = 0 ; i < n ; i++) {
-            for(int j = 0 ; j < n ; j++) {
-                if (i==j || computers[i][j] == 0) continue;
-                graph.get(i).add(j);
-            }
-        }
-        
-        for(int i = 0 ; i < n ; i++) {
             if(visited[i]) continue;
-            bfs(i);
+            bfs(i, computers);
             answer++;
         }
         
@@ -28,7 +16,7 @@ class Solution {
     }
     
     boolean[] visited;
-    void bfs(int start) {
+    void bfs(int start, int[][] computers) {
         Deque<Integer> queue = new ArrayDeque<>();
         
         queue.offerLast(start);
@@ -37,10 +25,10 @@ class Solution {
         while(!queue.isEmpty()) {
             int now = queue.pollFirst();
             
-            for(int next : graph.get(now)) {
-                if(!visited[next]) {
-                    queue.offerLast(next);
-                    visited[next] = true;
+            for(int i = 0 ; i < visited.length ; i++) {
+                if(!visited[i] && computers[now][i] != 0) {
+                    queue.offerLast(i);
+                    visited[i] = true;
                 }
             }
         }
