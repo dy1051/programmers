@@ -1,77 +1,48 @@
 import java.util.*;
+
 class Solution {
     public int solution(String begin, String target, String[] words) {
-        boolean flag = false;
-        for(int i = 0 ; i < words.length ; i++) {
-            if(words[i].equals(target)) {
-                flag = true;
-                break;
-            }
-        }
-        
-        if(!flag) return 0;
-        
-        int answer = Integer.MAX_VALUE;
-        
-        for(int i = 0 ; i < words.length ; i++) {
-            int result = check(words[i], begin);
-            
-            if(result == 0) {
-                answer = 1;
-                break;
-            } else if (result == 1) {
-                answer = Math.min(answer, bfs(i, words[i], target, words));
-            }
-        }
-        
-        return answer;
-    }
-    
-    int bfs(int idx, String begin, String target, String[] words) {
-        int result = 1;
-        
-        Deque<Integer> queue = new ArrayDeque<>();
-        boolean[] visited = new boolean[words.length];
         int[] dist = new int[words.length];
-        
-        queue.offerLast(idx);
-        visited[idx] = true;
-        dist[idx] = 1;
-        
+        Arrays.fill(dist, -1);
+
+        Deque<Integer> queue = new ArrayDeque<>();
+
+        // begin에서 한 번에 변환 가능한 단어들을 넣기
+        for (int i = 0; i < words.length; i++) {
+            if (canChange(begin, words[i])) {
+                dist[i] = 1;
+                queue.offerLast(i);
+            }
+        }
+
         while (!queue.isEmpty()) {
             int now = queue.pollFirst();
-            String nowStr = words[now];
-            
-            if (nowStr.equals(target)) {
+
+            if (words[now].equals(target)) {
                 return dist[now];
             }
-            
-            for(int i = 0 ; i < words.length ; i++) {
-                if(visited[i]) continue;
-                
-                int res = check(nowStr, words[i]);
-                
-                if (res != 1) continue;
+
+            for (int i = 0; i < words.length; i++) {
+                if (dist[i] != -1) continue;
+                if (!canChange(words[now], words[i])) continue;
 
                 dist[i] = dist[now] + 1;
-                visited[i] = true;
                 queue.offerLast(i);
-                
             }
-            
         }
-        
-        
-        return result;
+
+        return 0;
     }
-    
-    int check(String now, String check) {
-        int cnt = 0;
-        for(int i = 0 ; i < now.length() ; i++) {
-            if(now.charAt(i) != check.charAt(i)) {
-                cnt++;
+
+    boolean canChange(String a, String b) {
+        int count = 0;
+
+        for (int i = 0; i < a.length(); i++) {
+            if (a.charAt(i) != b.charAt(i)) {
+                if (++count > 1) return false;
             }
         }
-        return cnt;
+
+        return count == 1;
     }
 }
