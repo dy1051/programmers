@@ -7,7 +7,6 @@ class Solution {
 
         Deque<Integer> queue = new ArrayDeque<>();
 
-        // begin에서 한 번에 변환 가능한 단어들을 넣기
         for (int i = 0; i < words.length; i++) {
             if (canChange(begin, words[i])) {
                 dist[i] = 1;
