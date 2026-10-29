@@ -1,10 +1,7 @@
 import java.util.*;
 class Solution {
-    Map<String, Map<String, Integer>> map = new HashMap<>();
     List<String> l = new ArrayList<>();
     public String[] solution(String[][] tickets) {
-        String[] answer = {};
-        
         boolean[] visited = new boolean[tickets.length];
         Deque<Integer> deque = new ArrayDeque<>();
 
