@@ -34,7 +34,7 @@ class Solution {
 
             if (l.isEmpty()) l = route;
             else {
-                for(int i = 0 ; i < tickets.length ; i++) {
+                for(int i = 0 ; i < route.size() ; i++) {
                     if (l.get(i).compareTo(route.get(i)) > 0) {
                         l = route;
                         break;
