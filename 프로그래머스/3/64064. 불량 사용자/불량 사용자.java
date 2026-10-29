@@ -18,7 +18,7 @@ class Solution {
                 if(visited[i]) tmp = tmp+i;
             }
             
-            if(!tmp.equals("")) set.add(tmp);
+            set.add(tmp);
             
             return;
         }
