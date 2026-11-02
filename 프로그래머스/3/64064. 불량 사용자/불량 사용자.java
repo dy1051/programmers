@@ -1,50 +1,51 @@
 import java.util.*;
 class Solution {
-    boolean[] visited;
-
+    Set<Set<Integer>> set = new HashSet<>();
+    
     public int solution(String[] user_id, String[] banned_id) {
-        visited = new boolean[user_id.length];
-
-        dfs(0, user_id, banned_id);
-
+    
+        visited = new boolean[banned_id.length];
+        dfs(-1, user_id, banned_id);
+        
         return set.size();
     }
-
-    Set<String> set = new HashSet<>();
+    boolean[] visited;
+    Deque<Integer> deque = new ArrayDeque<>();
     void dfs(int idx, String[] user_id, String[] banned_id) {
-        if (idx == banned_id.length) {
-            String tmp = "";
-            for(int i = 0 ; i < visited.length ; i++) {
-                if(visited[i]) tmp = tmp+i;
-            }
-            
+        if(deque.size() == banned_id.length) {
+            Set<Integer> tmp = new HashSet<>(deque);
             set.add(tmp);
-            
             return;
         }
-
-        // 후보 선택 → 방문 처리 → 재귀 → 방문 복구
-        for (int i = 0 ; i < user_id.length ; i++) {
-            if (visited[i]) continue;
-            if (!match(user_id[i], banned_id[idx])) continue;
+        
+        for(int i = idx+1 ; i < user_id.length ; i++) {
+            String now = user_id[i];
             
-            visited[i] = true;
-            dfs(idx+1, user_id, banned_id);
-            visited[i] = false;
+            for(int j = 0 ; j < banned_id.length ; j++) {
+                if(visited[j]) continue;
+                if(!match(now, banned_id[j])) continue;
+                
+                visited[j] = true;
+                deque.offerLast(i);
+                dfs(i, user_id, banned_id);
+                deque.pollLast();
+                visited[j] = false;
+            }
         }
     }
-
-    boolean match(String user, String ban) {
-        if(user.length() != ban.length()) return false;
+    
+    boolean match(String a, String b) {
+        if(a.length() != b.length()) return false;
         
-        for(int i = 0 ; i < ban.length() ; i++) {
-            if(ban.charAt(i) == '*') continue;
-            
-            if(user.charAt(i) != ban.charAt(i)) {
-                return false;
+        boolean flag = true;
+        for(int c = 0 ; c < a.length() ; c++) {
+            if(b.charAt(c) == '*') continue;
+            if(a.charAt(c) != b.charAt(c)) {
+                flag = false;
+                break;
             }
         }
         
-        return true;
+        return flag;
     }
 }
