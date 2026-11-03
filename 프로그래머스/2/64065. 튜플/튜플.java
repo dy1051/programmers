@@ -1,8 +1,7 @@
 import java.util.*;
 class Solution {
-    public int[] solution(String s) {
-        ArrayList<Integer> answer = new ArrayList<>();
-        
+    ArrayList<Integer> answer = new ArrayList<>();
+    public int[] solution(String s) {        
         List<List<Integer>> list = new ArrayList<>();
         s = s.substring(2, s.length() - 2);
         s = s.replace("},{", "/");
@@ -19,45 +18,21 @@ class Solution {
         });
         
        
-        List<Integer> base = list.get(0);
-        answer.add(list.get(0).get(0));
-        
-        for(int i = 1 ; i < list.size() ; i++) {
-            List<Integer> compare = list.get(i);
-            int res = minus(base, compare);
-            answer.add(res);
-            base = compare;
-        }
+        compare(list);
         
         
         return answer.stream().mapToInt(Integer::intValue).toArray();
     }
     
-    int minus(List<Integer> base, List<Integer> compare) {
-        HashMap<Integer, Integer> baseMap = new HashMap<>();
-        for(int i : base) {
-            baseMap.put(i, baseMap.getOrDefault(i, 0)+1);
-        }
+    void compare(List<List<Integer>> compare) {
+        Set<Integer> seen = new HashSet<>();
         
-        HashMap<Integer, Integer> compareMap = new HashMap<>();
-        for(int i : compare) {
-            compareMap.put(i, compareMap.getOrDefault(i, 0)+1);
-        }
-        
-        for(int key : compareMap.keySet()) {
-            if(!baseMap.containsKey(key))
-                return key;
-            else {
-                compareMap.put(key, compareMap.get(key) - baseMap.get(key));
+        for(List<Integer> list : compare) {
+            for(int value : list) {
+                if(seen.add(value)) {
+                    answer.add(value);
+                }
             }
         }
-        
-        for(int key : compareMap.keySet()) {
-            if(compareMap.get(key) != 0)
-                return key;
-        }
-        
-        
-        return -1;
     }
 }
