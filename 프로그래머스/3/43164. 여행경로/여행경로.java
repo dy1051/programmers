@@ -1,54 +1,50 @@
 import java.util.*;
 class Solution {
-    List<String> l = new ArrayList<>();
+    ArrayList<String> answer = new ArrayList<>();
     public String[] solution(String[][] tickets) {
-        boolean[] visited = new boolean[tickets.length];
-        Deque<Integer> deque = new ArrayDeque<>();
-
-        for (int i = 0; i < tickets.length; i++) {
-            if (!tickets[i][0].equals("ICN")) continue;
-
-            visited[i] = true;
-            deque.offerLast(i);
-
-            dfs(i, tickets, visited, deque);
-
-            deque.pollLast();
-            visited[i] = false;
-        }
+        visited = new boolean[tickets.length];
+        dfs("ICN", tickets);
         
-        return l.stream().toArray(String[]::new);
+        return answer.toArray(String[]::new);
     }
     
-    void dfs(int now, String[][] tickets, boolean[] visited, Deque<Integer> deque) {
-        if (deque.size() == tickets.length) {
-            List<String> route = new ArrayList<>();
-            route.add("ICN");
-
-            for (int ticketIdx : deque) {
-                route.add(tickets[ticketIdx][1]);
-            }
-
-            if (l.isEmpty()) l = route;
-            else {
-                for(int i = 0 ; i < route.size() ; i++) {
-                    if (l.get(i).compareTo(route.get(i)) > 0) {
-                        l = route;
+    boolean[] visited;
+    Deque<Integer> deque = new ArrayDeque<>();
+    void dfs(String start, String[][] tickets) {
+        if(deque.size() == tickets.length){
+            ArrayList<Integer> tmp = new ArrayList<>(deque);
+            boolean flag = true;
+            
+            if (answer.size() != 0) {
+                for(int i = 0 ; i < deque.size() ; i++) {
+                    String now = tickets[tmp.get(i)][0];
+                    if (answer.get(i).compareTo(now) > 0) {
+                        flag = false;
                         break;
-                    } else if (l.get(i).compareTo(route.get(i)) < 0) {
+                    } else if(answer.get(i).compareTo(now) < 0) {
                         break;
                     }
                 }
+            } else {
+                flag = false;
             }
-            return;
+            
+            if(!flag) {
+                answer.clear();
+                for(int s : tmp) {
+                    answer.add(tickets[s][0]);
+                }
+                answer.add(tickets[tmp.get(tmp.size()-1)][1]);
+            }
         }
         
         for(int i = 0 ; i < tickets.length ; i++) {
             if(visited[i]) continue;
-            if(tickets[now][1].equals(tickets[i][0])) {
-                deque.offerLast(i);
+            
+            if(start.equals(tickets[i][0])) {
                 visited[i] = true;
-                dfs(i, tickets, visited, deque);
+                deque.offerLast(i);
+                dfs(tickets[i][1], tickets);
                 deque.pollLast();
                 visited[i] = false;
             }
