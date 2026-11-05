@@ -1,47 +1,43 @@
 import java.util.*;
 
 class Solution {
+    Deque<Integer> queue = new ArrayDeque<>();
+    int[] dist;
     public int solution(String begin, String target, String[] words) {
         int answer = Integer.MAX_VALUE;
+        
+        dist = new int[words.length];
+        Arrays.fill(dist, -1);
         
         for(int idx = 0 ; idx < words.length ; idx++) {
             String next = words[idx];
             
-            if (countDiff(begin, next) == 1) {
-                int res = bfs(idx, words, target);
-                answer = res == 0 ? answer : Math.min(answer, res);
+            if (countDiff(begin, next)) {
+                queue.offerLast(idx);
+                dist[idx] = 1;
             }
         }
         
+        answer = bfs(words, target);
         
-        return answer == Integer.MAX_VALUE ? 0 : answer;
+        return answer;
     }
     
-    int bfs(int idx, String[] words, String target) {
-        Deque<Integer> queue = new ArrayDeque<>();
-        int[] dist = new int[words.length];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        
-        queue.offerLast(idx);
-        dist[idx] = 1;
-        
+    int bfs(String[] words, String target) {
         int result = 0;
         while (!queue.isEmpty()) {
             int now = queue.pollFirst();
             String nowStr = words[now];
             
-            if(countDiff(nowStr, target) == 0) {
+            if(nowStr.equals(target)) {
                 result = dist[now];
                 break;
             }
             
             for(int i = 0 ; i < words.length ; i++) {
-                if (dist[i] <= dist[now] + 1) continue;
+                if (dist[i] != -1) continue;
                 
-                int res = countDiff(nowStr, words[i]);
-                if (res > 1) {
-                    continue;
-                } else if (res == 1) {
+                if (countDiff(nowStr, words[i])) {
                     dist[i] = dist[now] + 1;
                     queue.offerLast(i);
                 }
@@ -51,13 +47,13 @@ class Solution {
         return result;
     }
     
-    int countDiff(String base, String comp) {
+     boolean countDiff(String base, String comp) {
         int cnt = 0;
         for(int i = 0 ; i < base.length() ; i++) {
             if(base.charAt(i) != comp.charAt(i)) {
                 cnt++;
             }
         }
-        return cnt;
+        return cnt == 1;
     }
 }
