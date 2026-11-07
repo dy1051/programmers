@@ -1,19 +1,18 @@
 class Solution {
+    int answer = 0;
     public int solution(int[] numbers, int target) {
-        dfs(0, numbers.length, 0, target, numbers);
+        dfs(0, numbers, target, 0);
         return answer;
     }
     
-    int answer = 0;
-    void dfs(int n, int L, int sum, int target, int[] numbers) {
-        if(n == L) {
-            if(sum == target)
-                answer += 1;
+    void dfs(int idx, int[] numbers, int target, int sum) {
+        if(idx == numbers.length) {
+            if (target == sum)
+                answer++;
             return;
         }
         
-        dfs(n+1, L, sum + numbers[n], target, numbers);
-        dfs(n+1, L, sum - numbers[n], target, numbers);
-        
+        dfs(idx+1, numbers, target, sum+numbers[idx]);
+        dfs(idx+1, numbers, target, sum-numbers[idx]);
     }
 }
